@@ -355,16 +355,25 @@
               </ul>
           </li>
           <li>
-            <a href="#kittens" class="toc-h1 toc-link" data-title="Kittens">Kittens</a>
+            <a href="#payment-links" class="toc-h1 toc-link" data-title="Payment links">Payment links</a>
               <ul class="toc-list-h2">
                   <li>
-                    <a href="#get-all-kittens" class="toc-h2 toc-link" data-title="Get All Kittens">Get All Kittens</a>
+                    <a href="#creating-a-payment-link" class="toc-h2 toc-link" data-title="Creating a payment link">Creating a payment link</a>
                   </li>
                   <li>
-                    <a href="#get-a-specific-kitten" class="toc-h2 toc-link" data-title="Get a Specific Kitten">Get a Specific Kitten</a>
+                    <a href="#updating-a-payment-link" class="toc-h2 toc-link" data-title="Updating a payment link">Updating a payment link</a>
                   </li>
                   <li>
-                    <a href="#delete-a-specific-kitten" class="toc-h2 toc-link" data-title="Delete a Specific Kitten">Delete a Specific Kitten</a>
+                    <a href="#sending-a-payment-link" class="toc-h2 toc-link" data-title="Sending a payment link">Sending a payment link</a>
+                  </li>
+                  <li>
+                    <a href="#revoke-a-payment-link" class="toc-h2 toc-link" data-title="Revoke a payment link">Revoke a payment link</a>
+                  </li>
+                  <li>
+                    <a href="#list-payment-links" class="toc-h2 toc-link" data-title="List payment links">List payment links</a>
+                  </li>
+                  <li>
+                    <a href="#get-payment-link" class="toc-h2 toc-link" data-title="Get payment link">Get payment link</a>
                   </li>
               </ul>
           </li>
@@ -468,7 +477,7 @@ You must replace <code>api-key</code> with your API key.
       }'
 </span></code></pre></div>
 <blockquote>
-<p>Response</p>
+<p>201 Response</p>
 </blockquote>
 <div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
   </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"6b1b34ee-309e-493b-b59c-1d2430611202"</span><span class="p">,</span><span class="w">
@@ -535,7 +544,7 @@ You must replace <code>api-key</code> with your API key.
       }'
 </span></code></pre></div>
 <blockquote>
-<p>Response</p>
+<p>200 Response</p>
 </blockquote>
 <div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
   </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"6b1b34ee-309e-493b-b59c-1d2430611202"</span><span class="p">,</span><span class="w">
@@ -595,7 +604,7 @@ You must replace <code>api-key</code> with your API key.
   <span class="nt">-H</span> <span class="s2">"x-api-key: api-key"</span>
 </code></pre></div>
 <blockquote>
-<p>Response</p>
+<p>200 Response</p>
 </blockquote>
 <div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
   </span><span class="nl">"webhooks"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
@@ -709,115 +718,553 @@ app.listen(port, () => {
 </aside>
 <h2 id='webhook-retries'>Webhook retries</h2>
 <p>In the event that your endpoint returns a non-200 response, we will retry the deliver 5 additional times through out the day. If after the 5th retry we still receive a non-200 response, we will drop the event.</p>
-<h1 id='kittens'>Kittens</h1><h2 id='get-all-kittens'>Get All Kittens</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="s2">"http://example.com/api/kittens"</span> <span class="se">\</span>
-  <span class="nt">-H</span> <span class="s2">"Authorization: meowmeowmeow"</span>
+<h1 id='payment-links'>Payment links</h1><h2 id='creating-a-payment-link'>Creating a payment link</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">-X</span> <span class="s2">"POST"</span> <span class="s2">"https://staging.api.lopay.com/api/1/partner/payment-link"</span> <span class="se">\</span>
+  <span class="nt">-H</span> <span class="s2">"x-api-key: api-key"</span> <span class="se">\</span>
+  <span class="nt">-H</span> <span class="s2">"x-merchant-id: merchant-id"</span> <span class="se">\</span>
+  <span class="nt">-H</span> <span class="s2">"content-type: application/json"</span> <span class="se">\</span>
+  <span class="nt">-d</span> <span class="s1">'{
+        "amount": {
+          "units": 5000,
+          "currencyCode": "GBP"
+        },
+        "description": "Payment for invoice #1234",
+        "dataCollection": ["name", "email"],
+        "taxes": [
+          {
+            "name": "VAT (20%)",
+            "inclusive": true,
+            "rate": "20.0"
+          }
+        ]
+     }'</span>
 </code></pre></div>
 <blockquote>
-<p>The above command returns JSON structured like this:</p>
+<p>Response:</p>
 </blockquote>
-<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">[</span><span class="w">
-  </span><span class="p">{</span><span class="w">
-    </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Fluffums"</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"breed"</span><span class="p">:</span><span class="w"> </span><span class="s2">"calico"</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"fluffiness"</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"cuteness"</span><span class="p">:</span><span class="w"> </span><span class="mi">7</span><span class="w">
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"f2a4ceed-0d10-4fc4-b9b2-f5b4b459dc5c"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"pending"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"amount"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"units"</span><span class="p">:</span><span class="w"> </span><span class="mi">5000</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"currencyCode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GBP"</span><span class="w">
   </span><span class="p">},</span><span class="w">
-  </span><span class="p">{</span><span class="w">
-    </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Max"</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"breed"</span><span class="p">:</span><span class="w"> </span><span class="s2">"unknown"</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"fluffiness"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"cuteness"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="w">
-  </span><span class="p">}</span><span class="w">
-</span><span class="p">]</span><span class="w">
+  </span><span class="nl">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Payment for invoice #1234"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"dataCollection"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"name"</span><span class="p">,</span><span class="w"> </span><span class="s2">"email"</span><span class="p">],</span><span class="w">
+  </span><span class="nl">"taxes"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"VAT (20%)"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"inclusive"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"rate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"20.00"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
 </span></code></pre></div>
-<p>This endpoint retrieves all kittens.</p>
+<p>Create a new payment link</p>
 <h3 id='http-request-4'>HTTP Request</h3>
-<p><code>GET http://example.com/api/kittens</code></p>
-<h3 id='query-parameters'>Query Parameters</h3>
+<p><code>POST https://staging.api.lopay.com/api/1/partner/payment-link</code></p>
+<h3 id='request-body-3'>Request body</h3>
 <table><thead>
 <tr>
-<th>Parameter</th>
-<th>Default</th>
+<th>Property</th>
+<th>Type</th>
 <th>Description</th>
 </tr>
 </thead><tbody>
 <tr>
-<td>include_cats</td>
-<td>false</td>
-<td>If set to true, the result will also include cats.</td>
+<td><code>amount.units</code></td>
+<td>integer</td>
+<td>Payment amount in pence (i.e. £50 -&gt; 5000 units)</td>
 </tr>
 <tr>
-<td>available</td>
-<td>true</td>
-<td>If set to false, the result will include kittens that have already been adopted.</td>
+<td><code>amount.currencyCode</code></td>
+<td>string</td>
+<td>Currency code (i.e. GBP)</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td>string</td>
+<td>Payment link description</td>
+</tr>
+<tr>
+<td><code>dataCollection</code></td>
+<td>string[]</td>
+<td>Data to collect from customer. Available values: &quot;name&quot;, &quot;businessName&quot;, &quot;phoneNumber&quot;, &quot;email&quot;, and &quot;address&quot;.</td>
+</tr>
+<tr>
+<td><code>taxes[].name</code></td>
+<td>string</td>
+<td>Name of the tax (i.e. VAT 20%)</td>
+</tr>
+<tr>
+<td><code>taxes[].inclusive</code></td>
+<td>boolean</td>
+<td>Whether the tax is inclusive or not. Will always be <code>true</code> for VAT.</td>
+</tr>
+<tr>
+<td><code>taxes[].rate</code></td>
+<td>string</td>
+<td>Tax rate percentage. (i.e. &quot;20.0&quot; -&gt; 20%)</td>
 </tr>
 </tbody></table>
-
-<aside class="success">
-Remember — a happy kitten is an authenticated kitten!
-</aside>
-<h2 id='get-a-specific-kitten'>Get a Specific Kitten</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="s2">"http://example.com/api/kittens/2"</span> <span class="se">\</span>
-  <span class="nt">-H</span> <span class="s2">"Authorization: meowmeowmeow"</span>
+<h3 id='response-body-4'>Response body</h3>
+<table><thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>id</code></td>
+<td>string</td>
+<td>Payment link ID.</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td>string</td>
+<td>Payment link status. Available values: &quot;pending&quot;, &quot;cancelled&quot;, or &quot;completed&quot;.</td>
+</tr>
+<tr>
+<td><code>amount.units</code></td>
+<td>integer</td>
+<td>Payment amount in pence (i.e. £50 -&gt; 5000 units).</td>
+</tr>
+<tr>
+<td><code>amount.currencyCode</code></td>
+<td>string</td>
+<td>Currency code (i.e. GBP).</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td>string</td>
+<td>Payment link description.</td>
+</tr>
+<tr>
+<td><code>dataCollection</code></td>
+<td>string[]</td>
+<td>Data to collect from customer. Available values: &quot;name&quot;, &quot;businessName&quot;, &quot;phoneNumber&quot;, &quot;email&quot;, and &quot;address&quot;.</td>
+</tr>
+<tr>
+<td><code>taxes[].name</code></td>
+<td>string</td>
+<td>Name of the tax (i.e. VAT 20%).</td>
+</tr>
+<tr>
+<td><code>taxes[].inclusive</code></td>
+<td>boolean</td>
+<td>Whether the tax is inclusive or not. Will always be <code>true</code> for VAT.</td>
+</tr>
+<tr>
+<td><code>taxes[].rate</code></td>
+<td>string</td>
+<td>Tax rate percentage. (i.e. &quot;20.0&quot; -&gt; 20%).</td>
+</tr>
+</tbody></table>
+<h2 id='updating-a-payment-link'>Updating a payment link</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">-X</span> <span class="s2">"PUT"</span> <span class="s2">"https://staging.api.lopay.com/api/1/partner/payment-link/:paymentLinkId"</span> <span class="se">\</span>
+  <span class="nt">-H</span> <span class="s2">"x-api-key: api-key"</span> <span class="se">\</span>
+  <span class="nt">-H</span> <span class="s2">"x-merchant-id: merchant-id"</span> <span class="se">\</span>
+  <span class="nt">-H</span> <span class="s2">"content-type: application/json"</span> <span class="se">\</span>
+  <span class="nt">-d</span> <span class="s1">'{
+        "amount": {
+          "units": 5000,
+          "currencyCode": "GBP"
+        },
+        "description": "Payment for invoice #1234",
+        "dataCollection": ["name", "email"],
+        "taxes": [
+          {
+            "name": "VAT (20%)",
+            "inclusive": true,
+            "rate": "20.0"
+          }
+        ]
+     }'</span>
 </code></pre></div>
 <blockquote>
-<p>The above command returns JSON structured like this:</p>
+<p>200 Response:</p>
 </blockquote>
 <div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-  </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Max"</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"breed"</span><span class="p">:</span><span class="w"> </span><span class="s2">"unknown"</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"fluffiness"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"cuteness"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="w">
+  </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"f2a4ceed-0d10-4fc4-b9b2-f5b4b459dc5c"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"pending"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"amount"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"units"</span><span class="p">:</span><span class="w"> </span><span class="mi">5000</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"currencyCode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GBP"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="nl">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Payment for invoice #1234"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"dataCollection"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"name"</span><span class="p">,</span><span class="w"> </span><span class="s2">"email"</span><span class="p">],</span><span class="w">
+  </span><span class="nl">"taxes"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"VAT (20%)"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"inclusive"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"rate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"20.0"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">]</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
-<p>This endpoint retrieves a specific kitten.</p>
-
-<aside class="warning">Inside HTML code blocks like this one, you can't use Markdown, so use <code>&lt;code&gt;</code> blocks to denote code.</aside>
+<p>Update an existing payment link</p>
 <h3 id='http-request-5'>HTTP Request</h3>
-<p><code>GET http://example.com/kittens/&lt;ID&gt;</code></p>
-<h3 id='url-parameters'>URL Parameters</h3>
+<p><code>POST https://staging.api.lopay.com/api/1/partner/payment-link/:paymentLinkId</code></p>
+<h3 id='request-body-4'>Request body</h3>
 <table><thead>
 <tr>
-<th>Parameter</th>
+<th>Property</th>
+<th>Type</th>
 <th>Description</th>
 </tr>
 </thead><tbody>
 <tr>
-<td>ID</td>
-<td>The ID of the kitten to retrieve</td>
+<td><code>amount.units</code></td>
+<td>integer</td>
+<td>Payment amount in pence (i.e. £50 -&gt; 5000 units)</td>
+</tr>
+<tr>
+<td><code>amount.currencyCode</code></td>
+<td>string</td>
+<td>Currency code (i.e. GBP)</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td>string</td>
+<td>Payment link description</td>
 </tr>
 </tbody></table>
-<h2 id='delete-a-specific-kitten'>Delete a Specific Kitten</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="s2">"http://example.com/api/kittens/2"</span> <span class="se">\</span>
-  <span class="nt">-X</span> DELETE <span class="se">\</span>
-  <span class="nt">-H</span> <span class="s2">"Authorization: meowmeowmeow"</span>
-</code></pre></div>
-<blockquote>
-<p>The above command returns JSON structured like this:</p>
-</blockquote>
-<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-  </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"deleted"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">":("</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre></div>
-<p>This endpoint deletes a specific kitten.</p>
-<h3 id='http-request-6'>HTTP Request</h3>
-<p><code>DELETE http://example.com/kittens/&lt;ID&gt;</code></p>
-<h3 id='url-parameters-2'>URL Parameters</h3>
+<h3 id='response-body-5'>Response body</h3>
 <table><thead>
 <tr>
-<th>Parameter</th>
+<th>Property</th>
+<th>Type</th>
 <th>Description</th>
 </tr>
 </thead><tbody>
 <tr>
-<td>ID</td>
-<td>The ID of the kitten to delete</td>
+<td><code>id</code></td>
+<td>string</td>
+<td>Payment link ID</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td>string</td>
+<td>Payment link status.</td>
+</tr>
+<tr>
+<td><code>amount.units</code></td>
+<td>integer</td>
+<td>Payment amount in pence (i.e. £50 -&gt; 5000 units)</td>
+</tr>
+<tr>
+<td><code>amount.currencyCode</code></td>
+<td>string</td>
+<td>Currency code (i.e. GBP)</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td>string</td>
+<td>Payment link description</td>
+</tr>
+<tr>
+<td><code>dataCollection</code></td>
+<td>string[]</td>
+<td>Data to collect from customer.</td>
+</tr>
+<tr>
+<td><code>taxes[].name</code></td>
+<td>string</td>
+<td>Name of the tax (i.e. VAT 20%).</td>
+</tr>
+<tr>
+<td><code>taxes[].inclusive</code></td>
+<td>boolean</td>
+<td>Whether the tax is inclusive or not.</td>
+</tr>
+<tr>
+<td><code>taxes[].rate</code></td>
+<td>string</td>
+<td>Tax rate percentage. (i.e. &quot;20.0&quot; -&gt; 20%)</td>
+</tr>
+</tbody></table>
+<h2 id='sending-a-payment-link'>Sending a payment link</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">-X</span> <span class="s2">"POST"</span> <span class="s2">"https://staging.api.lopay.com/api/1/partner/payment-link/:paymentLinkId/send"</span> <span class="se">\</span>
+  <span class="nt">-H</span> <span class="s2">"x-api-key: api-key"</span> <span class="se">\</span>
+  <span class="nt">-H</span> <span class="s2">"x-merchant-id: merchant-id"</span> <span class="se">\</span>
+  <span class="nt">-H</span> <span class="s2">"content-type: application/json"</span> <span class="se">\</span>
+  <span class="nt">-d</span> <span class="s1">'{
+        "sms": {
+          "recipient": "+447595510472"
+        },
+        "email": {
+          "recipient": "peter.parker@gmail.com"
+        }
+     }'</span>
+</code></pre></div>
+<blockquote>
+<p>Response:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"sms"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"success"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="nl">"email"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"success"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p>Send the payment link via email and/or SMS.</p>
+<h3 id='http-request-6'>HTTP Request</h3>
+<p><code>POST https://staging.api.lopay.com/api/1/partner/payment-link/:paymentLinkId/send</code></p>
+<h3 id='request-body-5'>Request body</h3>
+<table><thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>sms.recipient</code></td>
+<td>string</td>
+<td>Optional. Receipient&#39;s phone number in E.164 format.</td>
+</tr>
+<tr>
+<td><code>email.recipient</code></td>
+<td>string</td>
+<td>Optional. Receipient&#39;s email address.</td>
+</tr>
+</tbody></table>
+
+<aside class="notice">
+You must specify at least one or the other.
+</aside>
+<h3 id='response-body-6'>Response body</h3>
+<table><thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>sms.status</code></td>
+<td>string</td>
+<td>Optional. Will be either &quot;success&quot; or &quot;failed&quot;.</td>
+</tr>
+<tr>
+<td><code>email.status</code></td>
+<td>string</td>
+<td>Optional. Will be either &quot;success&quot; or &quot;failed&quot;.</td>
+</tr>
+</tbody></table>
+<h2 id='revoke-a-payment-link'>Revoke a payment link</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">-X</span> <span class="s2">"DELETE"</span> <span class="s2">"https://staging.api.lopay.com/api/1/partner/payment-link/:paymentLinkId/send"</span> <span class="se">\</span>
+  <span class="nt">-H</span> <span class="s2">"x-api-key: api-key"</span> <span class="se">\</span>
+  <span class="nt">-H</span> <span class="s2">"x-merchant-id: merchant-id"</span> <span class="se">\</span>
+</code></pre></div>
+<blockquote>
+<p>204 Response:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight plaintext"><code>&lt;&lt; empty response &gt;&gt;
+</code></pre></div>
+<p>Disable a payment link. The payment link&#39;s status will be set to <code>cancelled</code> and will no longer be active.</p>
+<h3 id='http-request-7'>HTTP Request</h3>
+<p><code>DELETE https://staging.api.lopay.com/api/1/partner/payment-link/:paymentLinkId</code></p>
+<h3 id='response-body-7'>Response body</h3>
+<p>No body</p>
+<h2 id='list-payment-links'>List payment links</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://staging.api.lopay.com/api/1/partner/payment-link"</span> <span class="se">\</span>
+  <span class="nt">-H</span> <span class="s2">"x-api-key: api-key"</span> <span class="se">\</span>
+  <span class="nt">-H</span> <span class="s2">"x-merchant-id: merchant-id"</span> <span class="se">\</span>
+</code></pre></div>
+<blockquote>
+<p>200 Response:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"f2a4ceed-0d10-4fc4-b9b2-f5b4b459dc5c"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"amount"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"units"</span><span class="p">:</span><span class="w"> </span><span class="mi">5000</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"currencyCode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GBP"</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="nl">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Payment for invoice #1234"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"53121e81-43f3-4e94-a34b-8a3d3f216b92"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"amount"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"units"</span><span class="p">:</span><span class="w"> </span><span class="mi">1000</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"currencyCode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GBP"</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="nl">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Payment for invoice #5555"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">],</span><span class="w">
+  </span><span class="nl">"paging"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"pageNumber"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"pageSize"</span><span class="p">:</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"pageTotal"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"count"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p>List all payment links.</p>
+<h3 id='http-request-8'>HTTP request</h3>
+<p><code>GET https://staging.api.lopay.com/api/1/partner/payment-link</code></p>
+<h3 id='query-parameters'>Query parameters</h3>
+<table><thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>pageSize</code></td>
+<td>number</td>
+<td>Optional - default 20. Number of payment links to return</td>
+</tr>
+<tr>
+<td><code>pageNumber</code></td>
+<td>number</td>
+<td>Optional - default 1. Receipient&#39;s email address.</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td>string</td>
+<td>Optional. Filter by payment link status. Available values: &quot;pending&quot;, &quot;cancelled&quot;, or &quot;completed&quot;.</td>
+</tr>
+</tbody></table>
+<h3 id='response-body-8'>Response body</h3>
+<table><thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>data[].id</code></td>
+<td>string</td>
+<td>Payment link ID.</td>
+</tr>
+<tr>
+<td><code>data[].status</code></td>
+<td>string</td>
+<td>Payment link status.</td>
+</tr>
+<tr>
+<td><code>data[].amount.units</code></td>
+<td>string</td>
+<td>Payment link amount in pence.</td>
+</tr>
+<tr>
+<td><code>data[].amount.currencyCode</code></td>
+<td>string</td>
+<td>Payment link amount in currency.</td>
+</tr>
+<tr>
+<td><code>data[].description</code></td>
+<td>string</td>
+<td>Payment link description.</td>
+</tr>
+<tr>
+<td><code>paging.pageNumber</code></td>
+<td>number</td>
+<td>Current page of the response.</td>
+</tr>
+<tr>
+<td><code>paging.pageSize</code></td>
+<td>number</td>
+<td>Number of payment links to return in response.</td>
+</tr>
+<tr>
+<td><code>paging.pageTotal</code></td>
+<td>number</td>
+<td>Number of total available pages of payment links.</td>
+</tr>
+<tr>
+<td><code>paging.count</code></td>
+<td>number</td>
+<td>Total number of payment links.</td>
+</tr>
+</tbody></table>
+<h2 id='get-payment-link'>Get payment link</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="s2">"https://staging.api.lopay.com/api/1/partner/payment-link/:paymentLinkId"</span> <span class="se">\</span>
+  <span class="nt">-H</span> <span class="s2">"x-api-key: api-key"</span> <span class="se">\</span>
+  <span class="nt">-H</span> <span class="s2">"x-merchant-id: merchant-id"</span> <span class="se">\</span>
+</code></pre></div>
+<blockquote>
+<p>200 Response:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"f2a4ceed-0d10-4fc4-b9b2-f5b4b459dc5c"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"pending"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"amount"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"units"</span><span class="p">:</span><span class="w"> </span><span class="mi">5000</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"currencyCode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GBP"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="nl">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Payment for invoice #1234"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"dataCollection"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"name"</span><span class="p">,</span><span class="w"> </span><span class="s2">"email"</span><span class="p">],</span><span class="w">
+  </span><span class="nl">"taxes"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"VAT (20%)"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"inclusive"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"rate"</span><span class="p">:</span><span class="w"> </span><span class="mi">20</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p>Get payment link details</p>
+<h3 id='http-request-9'>HTTP request</h3>
+<p><code>GET https://staging.api.lopay.com/api/1/partner/payment-link/:paymentLinkId</code></p>
+<h3 id='response-body-9'>Response body</h3>
+<table><thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>id</code></td>
+<td>string</td>
+<td>Payment link ID.</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td>string</td>
+<td>Payment link status.</td>
+</tr>
+<tr>
+<td><code>amount.units</code></td>
+<td>string</td>
+<td>Payment link amount in pence.</td>
+</tr>
+<tr>
+<td><code>amount.currencyCode</code></td>
+<td>string</td>
+<td>Payment link amount in currency.</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td>string</td>
+<td>Payment link description.</td>
+</tr>
+<tr>
+<td><code>dataCollection</code></td>
+<td>string[]</td>
+<td>Data to collect from customer.</td>
+</tr>
+<tr>
+<td><code>taxes[].name</code></td>
+<td>string</td>
+<td>Name of the tax (i.e. VAT 20%).</td>
+</tr>
+<tr>
+<td><code>taxes[].inclusive</code></td>
+<td>boolean</td>
+<td>Whether the tax is inclusive or not.</td>
+</tr>
+<tr>
+<td><code>taxes[].rate</code></td>
+<td>string</td>
+<td>Tax rate percentage (i.e. &quot;20.0&quot;).</td>
 </tr>
 </tbody></table>
 <h1 id='errors'>Errors</h1>
-<p>The Lopay Partner API uses the following error codes:</p>
+<p>The Lopay Partner API can return the following error codes:</p>
 
 <table><thead>
 <tr>
@@ -830,20 +1277,16 @@ Remember — a happy kitten is an authenticated kitten!
 <td>Bad Request -- Your request is invalid.</td>
 </tr>
 <tr>
-<td>401</td>
-<td>Unauthorized -- Your API key is wrong.</td>
+<td>422</td>
+<td>Unprocessable entity -- Your request is valid, but we are unable to process it.</td>
 </tr>
 <tr>
-<td>403</td>
-<td>Forbidden -- The kitten requested is hidden for administrators only.</td>
+<td>401</td>
+<td>Unauthorized -- Your API key is missing or incorrect.</td>
 </tr>
 <tr>
 <td>404</td>
-<td>Not Found -- The specified kitten could not be found.</td>
-</tr>
-<tr>
-<td>405</td>
-<td>Method Not Allowed -- You tried to access a kitten with an invalid method.</td>
+<td>Not Found -- Resource not found</td>
 </tr>
 <tr>
 <td>406</td>
@@ -851,13 +1294,23 @@ Remember — a happy kitten is an authenticated kitten!
 </tr>
 <tr>
 <td>429</td>
-<td>Too Many Requests -- You&#39;re requesting too many kittens! Slow down!</td>
+<td>Too Many Requests -- Try again in a bit</td>
 </tr>
 <tr>
 <td>500</td>
 <td>Internal Server Error -- We had a problem with our server. Try again later.</td>
 </tr>
 </tbody></table>
+
+<p>All error responses will be in the following format:</p>
+
+<aside class="pre">
+{
+  "httpCode": 400,
+  "errorCode": "LO_PAY_ERR",
+  "errorMessage": "Invalid request"
+}
+</aside>
 
       </div>
       <div class="dark-box">

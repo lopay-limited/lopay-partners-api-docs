@@ -91,7 +91,7 @@ curl -X "POST "https://staging.api.lopay.com/api/1/partner/webhooks" \
       }'
 ```
 
-> Response
+> 201 Response
 
 ```json
 {
@@ -135,7 +135,7 @@ curl -X "POST "https://staging.api.lopay.com/api/1/partner/webhooks/:subscriptio
       }'
 ```
 
-> Response
+> 200 Response
 
 ```json
 {
@@ -177,7 +177,7 @@ curl "https://staging.api.lopay.com/api/1/partner/webhooks" \
   -H "x-api-key: api-key"
 ```
 
-> Response
+> 200 Response
 
 ```json
 {
@@ -282,112 +282,354 @@ app.listen(port, () => {
 ## Webhook retries
 In the event that your endpoint returns a non-200 response, we will retry the deliver 5 additional times through out the day. If after the 5th retry we still receive a non-200 response, we will drop the event.
 
-# Kittens
+# Payment links
 
-## Get All Kittens
+## Creating a payment link
 
 ```shell
-curl "http://example.com/api/kittens" \
-  -H "Authorization: meowmeowmeow"
+curl -X "POST" "https://staging.api.lopay.com/api/1/partner/payment-link" \
+  -H "x-api-key: api-key" \
+  -H "x-merchant-id: merchant-id" \
+  -H "content-type: application/json" \
+  -d '{
+        "amount": {
+          "units": 5000,
+          "currencyCode": "GBP"
+        },
+        "description": "Payment for invoice #1234",
+        "dataCollection": ["name", "email"],
+        "taxes": [
+          {
+            "name": "VAT (20%)",
+            "inclusive": true,
+            "rate": "20.0"
+          }
+        ]
+     }'
 ```
 
-> The above command returns JSON structured like this:
+> Response:
 
 ```json
-[
-  {
-    "id": 1,
-    "name": "Fluffums",
-    "breed": "calico",
-    "fluffiness": 6,
-    "cuteness": 7
+{
+  "id": "f2a4ceed-0d10-4fc4-b9b2-f5b4b459dc5c",
+  "status": "pending",
+  "amount": {
+    "units": 5000,
+    "currencyCode": "GBP"
   },
-  {
-    "id": 2,
-    "name": "Max",
-    "breed": "unknown",
-    "fluffiness": 5,
-    "cuteness": 10
-  }
-]
+  "description": "Payment for invoice #1234",
+  "dataCollection": ["name", "email"],
+  "taxes": [
+    {
+      "name": "VAT (20%)",
+      "inclusive": true,
+      "rate": "20.00"
+    }
+  ]
+}
 ```
 
-This endpoint retrieves all kittens.
+Create a new payment link
 
 ### HTTP Request
 
-`GET http://example.com/api/kittens`
+`POST https://staging.api.lopay.com/api/1/partner/payment-link`
 
-### Query Parameters
+### Request body
 
-Parameter | Default | Description
---------- | ------- | -----------
-include_cats | false | If set to true, the result will also include cats.
-available | true | If set to false, the result will include kittens that have already been adopted.
+Property              | Type     | Description
+--------------------- | -------- | -------------------------------------------------
+`amount.units`        | integer  | Payment amount in pence (i.e. £50 -> 5000 units)
+`amount.currencyCode` | string   | Currency code (i.e. GBP)
+`description`         | string   | Payment link description
+`dataCollection`      | string[] | Data to collect from customer. Available values: "name", "businessName", "phoneNumber", "email", and "address".
+`taxes[].name`        | string   | Name of the tax (i.e. VAT 20%)
+`taxes[].inclusive`   | boolean  | Whether the tax is inclusive or not. Will always be `true` for VAT.
+`taxes[].rate`        | string   | Tax rate percentage. (i.e. "20.0" -> 20%)
 
-<aside class="success">
-Remember — a happy kitten is an authenticated kitten!
+### Response body
+
+Property              | Type     | Description
+--------------------- | -------- | --------------------------------------------------
+`id`                  | string   | Payment link ID.
+`status`              | string   | Payment link status. Available values: "pending", "cancelled", or "completed".
+`amount.units`        | integer  | Payment amount in pence (i.e. £50 -> 5000 units).
+`amount.currencyCode` | string   | Currency code (i.e. GBP).
+`description`         | string   | Payment link description.
+`dataCollection`      | string[] | Data to collect from customer. Available values: "name", "businessName", "phoneNumber", "email", and "address".
+`taxes[].name`        | string   | Name of the tax (i.e. VAT 20%).
+`taxes[].inclusive`   | boolean  | Whether the tax is inclusive or not. Will always be `true` for VAT.
+`taxes[].rate`        | string   | Tax rate percentage. (i.e. "20.0" -> 20%).
+
+## Updating a payment link
+
+```shell
+curl -X "PUT" "https://staging.api.lopay.com/api/1/partner/payment-link/:paymentLinkId" \
+  -H "x-api-key: api-key" \
+  -H "x-merchant-id: merchant-id" \
+  -H "content-type: application/json" \
+  -d '{
+        "amount": {
+          "units": 5000,
+          "currencyCode": "GBP"
+        },
+        "description": "Payment for invoice #1234",
+        "dataCollection": ["name", "email"],
+        "taxes": [
+          {
+            "name": "VAT (20%)",
+            "inclusive": true,
+            "rate": "20.0"
+          }
+        ]
+     }'
+```
+
+> 200 Response:
+
+```json
+{
+  "id": "f2a4ceed-0d10-4fc4-b9b2-f5b4b459dc5c",
+  "status": "pending",
+  "amount": {
+    "units": 5000,
+    "currencyCode": "GBP"
+  },
+  "description": "Payment for invoice #1234",
+  "dataCollection": ["name", "email"],
+  "taxes": [
+    {
+      "name": "VAT (20%)",
+      "inclusive": true,
+      "rate": "20.0"
+    }
+  ]
+}
+```
+
+Update an existing payment link
+
+### HTTP Request
+
+`POST https://staging.api.lopay.com/api/1/partner/payment-link/:paymentLinkId`
+
+### Request body
+
+Property              | Type     | Description
+--------------------- | -------- | -------------------------------------------------
+`amount.units`        | integer  | Payment amount in pence (i.e. £50 -> 5000 units)
+`amount.currencyCode` | string   | Currency code (i.e. GBP)
+`description`         | string   | Payment link description
+
+### Response body
+
+Property              | Type     | Description
+--------------------- | -------- | --------------------------------------------------
+`id`                  | string   | Payment link ID
+`status`              | string   | Payment link status.
+`amount.units`        | integer  | Payment amount in pence (i.e. £50 -> 5000 units)
+`amount.currencyCode` | string   | Currency code (i.e. GBP)
+`description`         | string   | Payment link description
+`dataCollection`      | string[] | Data to collect from customer.
+`taxes[].name`        | string   | Name of the tax (i.e. VAT 20%).
+`taxes[].inclusive`   | boolean  | Whether the tax is inclusive or not.
+`taxes[].rate`        | string   | Tax rate percentage. (i.e. "20.0" -> 20%)
+
+## Sending a payment link
+
+```shell
+curl -X "POST" "https://staging.api.lopay.com/api/1/partner/payment-link/:paymentLinkId/send" \
+  -H "x-api-key: api-key" \
+  -H "x-merchant-id: merchant-id" \
+  -H "content-type: application/json" \
+  -d '{
+        "sms": {
+          "recipient": "+447595510472"
+        },
+        "email": {
+          "recipient": "peter.parker@gmail.com"
+        }
+     }'
+```
+
+> Response:
+
+```json
+{
+  "sms": {
+    "status": "success"
+  },
+  "email": {
+    "status": "success"
+  }
+}
+```
+
+Send the payment link via email and/or SMS.
+
+### HTTP Request
+
+`POST https://staging.api.lopay.com/api/1/partner/payment-link/:paymentLinkId/send`
+
+### Request body
+
+Property              | Type     | Description
+--------------------- | -------- | -------------------------------------------------
+`sms.recipient`       | string   | Optional. Receipient's phone number in E.164 format.
+`email.recipient`     | string   | Optional. Receipient's email address.
+
+<aside class="notice">
+You must specify at least one or the other.
 </aside>
 
-## Get a Specific Kitten
+
+### Response body
+
+Property              | Type     | Description
+--------------------- | -------- | --------------------------------------------------
+`sms.status`          | string   | Optional. Will be either "success" or "failed".
+`email.status`        | string   | Optional. Will be either "success" or "failed".
+
+
+## Revoke a payment link
 
 ```shell
-curl "http://example.com/api/kittens/2" \
-  -H "Authorization: meowmeowmeow"
+curl -X "DELETE" "https://staging.api.lopay.com/api/1/partner/payment-link/:paymentLinkId/send" \
+  -H "x-api-key: api-key" \
+  -H "x-merchant-id: merchant-id" \
 ```
 
-> The above command returns JSON structured like this:
+> 204 Response:
 
-```json
-{
-  "id": 2,
-  "name": "Max",
-  "breed": "unknown",
-  "fluffiness": 5,
-  "cuteness": 10
-}
+```
+<< empty response >>
 ```
 
-This endpoint retrieves a specific kitten.
-
-<aside class="warning">Inside HTML code blocks like this one, you can't use Markdown, so use <code>&lt;code&gt;</code> blocks to denote code.</aside>
+Disable a payment link. The payment link's status will be set to ```cancelled``` and will no longer be active.
 
 ### HTTP Request
 
-`GET http://example.com/kittens/<ID>`
+`DELETE https://staging.api.lopay.com/api/1/partner/payment-link/:paymentLinkId`
 
-### URL Parameters
+### Response body
 
-Parameter | Description
---------- | -----------
-ID | The ID of the kitten to retrieve
+No body
 
-## Delete a Specific Kitten
+
+## List payment links
 
 ```shell
-curl "http://example.com/api/kittens/2" \
-  -X DELETE \
-  -H "Authorization: meowmeowmeow"
+curl "https://staging.api.lopay.com/api/1/partner/payment-link" \
+  -H "x-api-key: api-key" \
+  -H "x-merchant-id: merchant-id" \
 ```
 
-> The above command returns JSON structured like this:
+> 200 Response:
 
 ```json
 {
-  "id": 2,
-  "deleted" : ":("
+  "data": [
+    {
+      "id": "f2a4ceed-0d10-4fc4-b9b2-f5b4b459dc5c",
+      "amount": {
+        "units": 5000,
+        "currencyCode": "GBP"
+      },
+      "description": "Payment for invoice #1234"
+    },
+    {
+      "id": "53121e81-43f3-4e94-a34b-8a3d3f216b92",
+      "amount": {
+        "units": 1000,
+        "currencyCode": "GBP"
+      },
+      "description": "Payment for invoice #5555"
+    }
+  ],
+  "paging": {
+    "pageNumber": 1,
+    "pageSize": 20,
+    "pageTotal": 1,
+    "count": 1
+  }
 }
 ```
 
-This endpoint deletes a specific kitten.
+List all payment links.
 
-### HTTP Request
+### HTTP request
 
-`DELETE http://example.com/kittens/<ID>`
+`GET https://staging.api.lopay.com/api/1/partner/payment-link`
 
-### URL Parameters
+### Query parameters
 
-Parameter | Description
---------- | -----------
-ID | The ID of the kitten to delete
+Property              | Type     | Description
+--------------------- | -------- | ---------------------------------------------------------
+`pageSize`            | number   | Optional - default 20. Number of payment links to return
+`pageNumber`          | number   | Optional - default 1. Receipient's email address.
+`status`              | string   | Optional. Filter by payment link status. Available values: "pending", "cancelled", or "completed".
+ 
+### Response body
 
+Property                     | Type     | Description
+---------------------------- | -------- | --------------------------------------------------
+`data[].id`                  | string   | Payment link ID.
+`data[].status`              | string   | Payment link status.
+`data[].amount.units`        | string   | Payment link amount in pence.
+`data[].amount.currencyCode` | string   | Payment link amount in currency.
+`data[].description`         | string   | Payment link description.
+`paging.pageNumber`          | number   | Current page of the response.
+`paging.pageSize`            | number   | Number of payment links to return in response.
+`paging.pageTotal`           | number   | Number of total available pages of payment links.
+`paging.count`               | number   | Total number of payment links.
+
+## Get payment link
+
+```shell
+curl "https://staging.api.lopay.com/api/1/partner/payment-link/:paymentLinkId" \
+  -H "x-api-key: api-key" \
+  -H "x-merchant-id: merchant-id" \
+```
+
+> 200 Response:
+
+```json
+{
+  "id": "f2a4ceed-0d10-4fc4-b9b2-f5b4b459dc5c",
+  "status": "pending",
+  "amount": {
+    "units": 5000,
+    "currencyCode": "GBP"
+  },
+  "description": "Payment for invoice #1234",
+  "dataCollection": ["name", "email"],
+  "taxes": [
+    {
+      "name": "VAT (20%)",
+      "inclusive": true,
+      "rate": 20
+    }
+  ]
+}
+```
+
+Get payment link details
+
+### HTTP request
+
+`GET https://staging.api.lopay.com/api/1/partner/payment-link/:paymentLinkId`
+
+### Response body
+
+Property              | Type     | Description
+--------------------- | -------- | -------------------------------------
+`id`                  | string   | Payment link ID.
+`status`              | string   | Payment link status.
+`amount.units`        | string   | Payment link amount in pence.
+`amount.currencyCode` | string   | Payment link amount in currency.
+`description`         | string   | Payment link description.
+`dataCollection`      | string[] | Data to collect from customer.
+`taxes[].name`        | string   | Name of the tax (i.e. VAT 20%).
+`taxes[].inclusive`   | boolean  | Whether the tax is inclusive or not.
+`taxes[].rate`        | string   | Tax rate percentage (i.e. "20.0").

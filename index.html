@@ -291,7 +291,7 @@
   color: #859900;
 }
     </style>
-    <link href="stylesheets/screen-96e170df.css" rel="stylesheet" media="screen" />
+    <link href="stylesheets/screen-c023a717.css" rel="stylesheet" media="screen" />
     <link href="stylesheets/print-614e8f31.css" rel="stylesheet" media="print" />
       <script src="javascripts/all-024da600.js"></script>
 
@@ -464,6 +464,67 @@ You must replace <code>api-key</code> with your API key.
   "createdAt": "2024-06-12T19:03:04.456Z",
   "type": "payment.success",
   "data": {} // data specific to the event
+}
+</aside>
+<h3 id='payment-success'>payment.success</h3>
+<aside class="pre">
+{
+  "id": "cbb90acf-a45d-4b2a-84dd-b6962921d6aa",
+  "object": "event",
+  "createdAt": "2024-06-12T19:03:04.456Z",
+  "type": "payment.success",
+  "data": {
+    "paymentLinkId": "2a4ceed-0d10-4fc4-b9b2-f5b4b459dc5c"
+    "paymentId": "9b8e457c-f679-4d2f-9551-ee8aaf7760f7"
+  }
+}
+</aside>
+<h3 id='payment-failed'>payment.failed</h3>
+<aside class="pre">
+{
+  "id": "cbb90acf-a45d-4b2a-84dd-b6962921d6aa",
+  "object": "event",
+  "createdAt": "2024-06-12T19:03:04.456Z",
+  "type": "payment.failed",
+  "data": {
+    "paymentLinkId": "2a4ceed-0d10-4fc4-b9b2-f5b4b459dc5c"
+  }
+}
+</aside>
+<h3 id='paymentlink-created'>paymentLink.created</h3>
+<aside class="pre">
+{
+  "id": "cbb90acf-a45d-4b2a-84dd-b6962921d6aa",
+  "object": "event",
+  "createdAt": "2024-06-12T19:03:04.456Z",
+  "type": "paymentLink.created",
+  "data": {
+    "paymentLinkId": "2a4ceed-0d10-4fc4-b9b2-f5b4b459dc5c"
+  }
+}
+</aside>
+<h3 id='paymentlink-updated'>paymentLink.updated</h3>
+<aside class="pre">
+{
+  "id": "cbb90acf-a45d-4b2a-84dd-b6962921d6aa",
+  "object": "event",
+  "createdAt": "2024-06-12T19:03:04.456Z",
+  "type": "paymentLink.updated",
+  "data": {
+    "paymentLinkId": "2a4ceed-0d10-4fc4-b9b2-f5b4b459dc5c"
+  }
+}
+</aside>
+<h3 id='paymentlink-revoked'>paymentLink.revoked</h3>
+<aside class="pre">
+{
+  "id": "cbb90acf-a45d-4b2a-84dd-b6962921d6aa",
+  "object": "event",
+  "createdAt": "2024-06-12T19:03:04.456Z",
+  "type": "paymentLink.revoked",
+  "data": {
+    "paymentLinkId": "2a4ceed-0d10-4fc4-b9b2-f5b4b459dc5c"
+  }
 }
 </aside>
 <h2 id='subscribing-to-webhook-events'>Subscribing to webhook events</h2>
@@ -1190,7 +1251,7 @@ You must specify at least one or the other.
 </blockquote>
 <div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
   </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"f2a4ceed-0d10-4fc4-b9b2-f5b4b459dc5c"</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"pending"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"completed"</span><span class="p">,</span><span class="w">
   </span><span class="nl">"amount"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
     </span><span class="nl">"units"</span><span class="p">:</span><span class="w"> </span><span class="mi">5000</span><span class="p">,</span><span class="w">
     </span><span class="nl">"currencyCode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GBP"</span><span class="w">
@@ -1201,7 +1262,68 @@ You must specify at least one or the other.
     </span><span class="p">{</span><span class="w">
       </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"VAT (20%)"</span><span class="p">,</span><span class="w">
       </span><span class="nl">"inclusive"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
-      </span><span class="nl">"rate"</span><span class="p">:</span><span class="w"> </span><span class="mi">20</span><span class="w">
+      </span><span class="nl">"rate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"20.0"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">],</span><span class="w">
+  </span><span class="nl">"payments"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"9b8e457c-f679-4d2f-9551-ee8aaf7760f7"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"tenderType"</span><span class="p">:</span><span class="w"> </span><span class="s2">"card"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"card"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"visa"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"country"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GB"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"lastFour"</span><span class="p">:</span><span class="w"> </span><span class="s2">"4242"</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="nl">"customer"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+          </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"name"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Peter"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+          </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"email"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"peter.parker@gmail.com"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+      </span><span class="p">],</span><span class="w">
+      </span><span class="nl">"taxes"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+          </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"VAT (20%)"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"inclusive"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"rate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"20.0"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+      </span><span class="p">],</span><span class="w">
+      </span><span class="nl">"subtotal"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"units"</span><span class="p">:</span><span class="w"> </span><span class="mi">5000</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"currencyCode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GBP"</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="nl">"tip"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"units"</span><span class="p">:</span><span class="w"> </span><span class="mi">1000</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"currencyCode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GBP"</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="nl">"total"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"units"</span><span class="p">:</span><span class="w"> </span><span class="mi">6000</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"currencyCode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GBP"</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="nl">"fee"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"gross"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="nl">"units"</span><span class="p">:</span><span class="w"> </span><span class="mi">138</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"currencyCode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GBP"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="nl">"discount"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="nl">"units"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"currencyCode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GBP"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="nl">"net"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="nl">"units"</span><span class="p">:</span><span class="w"> </span><span class="mi">138</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"currencyCode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GBP"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="nl">"net"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"units"</span><span class="p">:</span><span class="w"> </span><span class="mi">5862</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"currencyCode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"GBP"</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="nl">"refunds"</span><span class="p">:</span><span class="w"> </span><span class="p">[],</span><span class="w">
+      </span><span class="nl">"createdAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2024-05-29T00:10:51.699Z"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"updatedAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2024-05-29T00:10:51.699Z"</span><span class="w">
     </span><span class="p">}</span><span class="w">
   </span><span class="p">]</span><span class="w">
 </span><span class="p">}</span><span class="w">
@@ -1255,14 +1377,153 @@ You must specify at least one or the other.
 <tr>
 <td><code>taxes[].inclusive</code></td>
 <td>boolean</td>
-<td>Whether the tax is inclusive or not.</td>
+<td>Whether the tax is inclusive or not. VAT will always be <code>true</code>.</td>
 </tr>
 <tr>
 <td><code>taxes[].rate</code></td>
 <td>string</td>
 <td>Tax rate percentage (i.e. &quot;20.0&quot;).</td>
 </tr>
+<tr>
+<td><code>payments[].id</code></td>
+<td>string</td>
+<td>Payment ID.</td>
+</tr>
+<tr>
+<td><code>payments[].tenderType</code></td>
+<td>string</td>
+<td>Payment method used. &quot;card&quot; or &quot;bankTransfer&quot;</td>
+</tr>
+<tr>
+<td><code>payments[].card.type</code></td>
+<td>string</td>
+<td>Optional. Card type &quot;visa&quot;, &quot;mastercard&quot;, &quot;amex&quot;, &quot;diners&quot;, &quot;discover, or &quot;jcb&quot;.</td>
+</tr>
+<tr>
+<td><code>payments[].card.country</code></td>
+<td>string</td>
+<td>Optional. Country where card was issued.</td>
+</tr>
+<tr>
+<td><code>payments[].card.lastFour</code></td>
+<td>string</td>
+<td>Optional. Last four digits of card number.</td>
+</tr>
+<tr>
+<td><code>payments[].customer[].type</code></td>
+<td>string</td>
+<td>Type of customer information. &quot;name&quot;, &quot;businessName&quot;, &quot;phoneNumber&quot;, &quot;email&quot;, &quot;addressLine1&quot;, &quot;addressLine2&quot;, &quot;addressTown&quot;, &quot;addressState&quot;, or &quot;addressPostCode&quot;.</td>
+</tr>
+<tr>
+<td><code>payments[].customer[].value</code></td>
+<td>string</td>
+<td>Customer detail value.</td>
+</tr>
+<tr>
+<td><code>payments[].taxes[].name</code></td>
+<td>string</td>
+<td>Name of the tax (i.e. VAT 20%).</td>
+</tr>
+<tr>
+<td><code>payments[].taxes[].inclusive</code></td>
+<td>string</td>
+<td>Whether the tax is inclusive or not. VAT will always be <code>true</code>.</td>
+</tr>
+<tr>
+<td><code>payments[].taxes[].rate</code></td>
+<td>string</td>
+<td>Tax rate percentage (i.e. &quot;20.0&quot;).</td>
+</tr>
+<tr>
+<td><code>payments[].subtotal.units</code></td>
+<td>string</td>
+<td>Amount of payment (excluding tip + exclusive taxes) in pence.</td>
+</tr>
+<tr>
+<td><code>payments[].subtotal.currencyCode</code></td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td><code>payments[].tip.units</code></td>
+<td>string</td>
+<td>Tip amount in pence.</td>
+</tr>
+<tr>
+<td><code>payments[].tip.currencyCode</code></td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td><code>payments[].total.units</code></td>
+<td>string</td>
+<td>Total payment amount (including tip + exclusive taxes).</td>
+</tr>
+<tr>
+<td><code>payments[].total.currencyCode</code></td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td><code>payments[].fee.gross.units</code></td>
+<td>string</td>
+<td>Gross fee total in pence.</td>
+</tr>
+<tr>
+<td><code>payments[].fee.gross.currencyCode</code></td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td><code>payments[].fee.discount.units</code></td>
+<td>string</td>
+<td>Any fee discounts applied in pence.</td>
+</tr>
+<tr>
+<td><code>payments[].fee.discount.currencyCode</code></td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td><code>payments[].fee.net.units</code></td>
+<td>string</td>
+<td>Gross fee - fee discount (i.e. fees actually paid) in pence.</td>
+</tr>
+<tr>
+<td><code>payments[].fee.net.currencyCode</code></td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td><code>payments[].net.units</code></td>
+<td>string</td>
+<td>Net amount of payment received in pence.</td>
+</tr>
+<tr>
+<td><code>payments[].net.currencyCode</code></td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td><code>payments[].refunds[]</code></td>
+<td>PaymentDto</td>
+<td>Same as this payment structure.</td>
+</tr>
+<tr>
+<td><code>payments[].createdAt</code></td>
+<td>string</td>
+<td>ISO 8601 date string (i.e. 2024-05-29T00:10:51.699Z) when payment was taken.</td>
+</tr>
+<tr>
+<td><code>payments[].updatedAt</code></td>
+<td>string</td>
+<td>ISO 8601 date string (i.e. 2024-05-29T00:10:51.699Z) when payment was last updated.</td>
+</tr>
 </tbody></table>
+
+<aside class="notice">
+Currently, there will only be at most one payment object in the <code>payments</code> field.
+</aside>
 <h1 id='errors'>Errors</h1>
 <p>The Lopay Partner API can return the following error codes:</p>
 

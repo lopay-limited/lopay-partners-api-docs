@@ -77,6 +77,77 @@ All events share the following basic structure:
 }
 </aside>
 
+### payment.success
+
+<aside class="pre">
+{
+  "id": "cbb90acf-a45d-4b2a-84dd-b6962921d6aa",
+  "object": "event",
+  "createdAt": "2024-06-12T19:03:04.456Z",
+  "type": "payment.success",
+  "data": {
+    "paymentLinkId": "2a4ceed-0d10-4fc4-b9b2-f5b4b459dc5c"
+    "paymentId": "9b8e457c-f679-4d2f-9551-ee8aaf7760f7"
+  }
+}
+</aside>
+
+### payment.failed
+
+<aside class="pre">
+{
+  "id": "cbb90acf-a45d-4b2a-84dd-b6962921d6aa",
+  "object": "event",
+  "createdAt": "2024-06-12T19:03:04.456Z",
+  "type": "payment.failed",
+  "data": {
+    "paymentLinkId": "2a4ceed-0d10-4fc4-b9b2-f5b4b459dc5c"
+  }
+}
+</aside>
+
+### paymentLink.created
+
+<aside class="pre">
+{
+  "id": "cbb90acf-a45d-4b2a-84dd-b6962921d6aa",
+  "object": "event",
+  "createdAt": "2024-06-12T19:03:04.456Z",
+  "type": "paymentLink.created",
+  "data": {
+    "paymentLinkId": "2a4ceed-0d10-4fc4-b9b2-f5b4b459dc5c"
+  }
+}
+</aside>
+
+### paymentLink.updated
+
+<aside class="pre">
+{
+  "id": "cbb90acf-a45d-4b2a-84dd-b6962921d6aa",
+  "object": "event",
+  "createdAt": "2024-06-12T19:03:04.456Z",
+  "type": "paymentLink.updated",
+  "data": {
+    "paymentLinkId": "2a4ceed-0d10-4fc4-b9b2-f5b4b459dc5c"
+  }
+}
+</aside>
+
+### paymentLink.revoked
+
+<aside class="pre">
+{
+  "id": "cbb90acf-a45d-4b2a-84dd-b6962921d6aa",
+  "object": "event",
+  "createdAt": "2024-06-12T19:03:04.456Z",
+  "type": "paymentLink.revoked",
+  "data": {
+    "paymentLinkId": "2a4ceed-0d10-4fc4-b9b2-f5b4b459dc5c"
+  }
+}
+</aside>
+
 ## Subscribing to webhook events
 
 Configure a new webhook subscription.
@@ -597,7 +668,7 @@ curl "https://staging.api.lopay.com/api/1/partner/payment-link/:paymentLinkId" \
 ```json
 {
   "id": "f2a4ceed-0d10-4fc4-b9b2-f5b4b459dc5c",
-  "status": "pending",
+  "status": "completed",
   "amount": {
     "units": 5000,
     "currencyCode": "GBP"
@@ -608,7 +679,68 @@ curl "https://staging.api.lopay.com/api/1/partner/payment-link/:paymentLinkId" \
     {
       "name": "VAT (20%)",
       "inclusive": true,
-      "rate": 20
+      "rate": "20.0"
+    }
+  ],
+  "payments": [
+    {
+      "id": "9b8e457c-f679-4d2f-9551-ee8aaf7760f7",
+      "tenderType": "card",
+      "card": {
+        "type": "visa",
+        "country": "GB",
+        "lastFour": "4242"
+      },
+      "customer": [
+        {
+          "type": "name",
+          "value": "Peter"
+        },
+        {
+          "type": "email",
+          "value": "peter.parker@gmail.com"
+        }
+      ],
+      "taxes": [
+        {
+          "name": "VAT (20%)",
+          "inclusive": true,
+          "rate": "20.0"
+        }
+      ],
+      "subtotal": {
+        "units": 5000,
+        "currencyCode": "GBP"
+      },
+      "tip": {
+        "units": 1000,
+        "currencyCode": "GBP"
+      },
+      "total": {
+        "units": 6000,
+        "currencyCode": "GBP"
+      },
+      "fee": {
+        "gross": {
+          "units": 138,
+          "currencyCode": "GBP"
+        },
+        "discount": {
+          "units": 0,
+          "currencyCode": "GBP"
+        },
+        "net": {
+          "units": 138,
+          "currencyCode": "GBP"
+        }
+      },
+      "net": {
+        "units": 5862,
+        "currencyCode": "GBP"
+      },
+      "refunds": [],
+      "createdAt": "2024-05-29T00:10:51.699Z",
+      "updatedAt": "2024-05-29T00:10:51.699Z"
     }
   ]
 }
@@ -622,14 +754,45 @@ Get payment link details
 
 ### Response body
 
-Property              | Type     | Description
---------------------- | -------- | -------------------------------------
-`id`                  | string   | Payment link ID.
-`status`              | string   | Payment link status.
-`amount.units`        | string   | Payment link amount in pence.
-`amount.currencyCode` | string   | Payment link amount in currency.
-`description`         | string   | Payment link description.
-`dataCollection`      | string[] | Data to collect from customer.
-`taxes[].name`        | string   | Name of the tax (i.e. VAT 20%).
-`taxes[].inclusive`   | boolean  | Whether the tax is inclusive or not.
-`taxes[].rate`        | string   | Tax rate percentage (i.e. "20.0").
+Property                               | Type       | Description
+-------------------------------------- | ---------- | -------------------------------------
+`id`                                   | string     | Payment link ID.
+`status`                               | string     | Payment link status.
+`amount.units`                         | string     | Payment link amount in pence.
+`amount.currencyCode`                  | string     | Payment link amount in currency.
+`description`                          | string     | Payment link description.
+`dataCollection`                       | string[]   | Data to collect from customer.
+`taxes[].name`                         | string     | Name of the tax (i.e. VAT 20%).
+`taxes[].inclusive`                    | boolean    | Whether the tax is inclusive or not. VAT will always be ```true```.
+`taxes[].rate`                         | string     | Tax rate percentage (i.e. "20.0").
+`payments[].id`                        | string     | Payment ID.
+`payments[].tenderType`                | string     | Payment method used. "card" or "bankTransfer"
+`payments[].card.type`                 | string     | Optional. Card type "visa", "mastercard", "amex", "diners", "discover, or "jcb".
+`payments[].card.country`              | string     | Optional. Country where card was issued.
+`payments[].card.lastFour`             | string     | Optional. Last four digits of card number.
+`payments[].customer[].type`           | string     | Type of customer information. "name", "businessName", "phoneNumber", "email", "addressLine1", "addressLine2", "addressTown", "addressState", or "addressPostCode".
+`payments[].customer[].value`          | string     | Customer detail value.
+`payments[].taxes[].name`              | string     | Name of the tax (i.e. VAT 20%).
+`payments[].taxes[].inclusive`         | string     | Whether the tax is inclusive or not. VAT will always be ```true```.
+`payments[].taxes[].rate`              | string     | Tax rate percentage (i.e. "20.0").
+`payments[].subtotal.units`            | string     | Amount of payment (excluding tip + exclusive taxes) in pence.
+`payments[].subtotal.currencyCode`     | string     |
+`payments[].tip.units`                 | string     | Tip amount in pence.
+`payments[].tip.currencyCode`          | string     |
+`payments[].total.units`               | string     | Total payment amount (including tip + exclusive taxes).
+`payments[].total.currencyCode`        | string     |
+`payments[].fee.gross.units`           | string     | Gross fee total in pence.
+`payments[].fee.gross.currencyCode`    | string     |
+`payments[].fee.discount.units`        | string     | Any fee discounts applied in pence.
+`payments[].fee.discount.currencyCode` | string     |
+`payments[].fee.net.units`             | string     | Gross fee - fee discount (i.e. fees actually paid) in pence.
+`payments[].fee.net.currencyCode`      | string     | 
+`payments[].net.units`                 | string     | Net amount of payment received in pence.
+`payments[].net.currencyCode`          | string     |
+`payments[].refunds[]`                 | PaymentDto | Same as this payment structure.
+`payments[].createdAt`                 | string     | ISO 8601 date string (i.e. 2024-05-29T00:10:51.699Z) when payment was taken.
+`payments[].updatedAt`                 | string     | ISO 8601 date string (i.e. 2024-05-29T00:10:51.699Z) when payment was last updated.
+
+<aside class="notice">
+Currently, there will only be at most one payment object in the <code>payments</code> field.
+</aside>
